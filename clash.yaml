@@ -1,0 +1,17 @@
+proxies:
+  - name: "UK-SOCKS5"
+    type: socks5
+    server: 5.101.149.240
+    port: 50100
+    username: wup33772
+    password: 7RdGm74iVb
+    udp: true
+
+proxy-groups:
+  - name: "Auto"
+    type: select
+    proxies:
+      - UK-SOCKS5
+
+rules:
+  - MATCH,Auto
