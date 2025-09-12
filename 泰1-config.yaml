@@ -1,0 +1,16 @@
+proxies:
+  - name: "Thailand_IP"
+    type: socks5
+    server: 112.143.0.33
+    port: 50101
+    username: wup33772
+    password: 7RdGm74iVb
+
+proxy-groups:
+  - name: "Proxy"
+    type: select
+    proxies:
+      - "Thailand_IP"
+
+rules:
+  - MATCH,Proxy
