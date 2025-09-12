@@ -1,0 +1,70 @@
+# ===== 基本设置 =====
+port: 7890
+socks-port: 7891
+allow-lan: false
+mode: rule            # ← 不修改模式将跟随此处，默认走“规则模式”
+log-level: info
+unified-delay: true
+
+# ===== 节点 =====
+proxies:
+  - name: "Thailand_IP"
+    type: socks5
+    server: 112.143.0.33
+    port: 50101
+    username: wup33772
+    password: 7RdGm74iVb
+    udp: true
+
+# ===== 分组选路 =====
+proxy-groups:
+  # 日常主用：规则模式里会用到这个组
+  - name: "🚀 Proxy"
+    type: select
+    proxies:
+      - "♻️ Auto"
+      - "Thailand_IP"
+      - DIRECT
+
+  # 自动测速，定期选择更快的（现在只有一个节点，也可以保留）
+  - name: "♻️ Auto"
+    type: url-test
+    proxies:
+      - "Thailand_IP"
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+
+  # 提供给“全局模式”使用的组（很多客户端会寻找名为 GLOBAL 的组）
+  - name: "GLOBAL"
+    type: select
+    proxies:
+      - "Thailand_IP"
+      - DIRECT
+
+  # 可选：你也可以在 App 里选择这个当作全局组（和 GLOBAL 等价）
+  - name: "🧭 Global"
+    type: select
+    proxies:
+      - "Thailand_IP"
+      - DIRECT
+
+# ===== 规则（国内直连，其他走代理；常用测 IP 站点强制代理）=====
+rules:
+  # 局域网直连
+  - DOMAIN-SUFFIX,local,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+
+  # 常用测 IP / 测速网站强制走代理（避免显示本地宽带 IP）
+  - DOMAIN-SUFFIX,ip.sb,🚀 Proxy
+  - DOMAIN-SUFFIX,ip138.com,🚀 Proxy
+  - DOMAIN-SUFFIX,whoer.net,🚀 Proxy
+  - DOMAIN-SUFFIX,speedtest.net,🚀 Proxy
+
+  # 国内 IP 直连
+  - GEOIP,CN,DIRECT
+
+  # 其他全部走代理（兜底）
+  - MATCH,🚀 Proxy
