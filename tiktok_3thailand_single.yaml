@@ -1,0 +1,30 @@
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+external-controller: :9090
+
+proxies:
+  - name: "Thailand-IPRoyal-Socks5"
+    type: socks5
+    server: 95.170.21.232
+    port: 11324
+    username: 14a6853ff7b65
+    password: 59a856a5c4
+    udp: true
+
+proxy-groups:
+  - name: "TIKTOK"
+    type: select
+    proxies:
+      - "Thailand-IPRoyal-Socks5"
+      - DIRECT
+
+rules:
+  # TikTok 流量走代理
+  - DOMAIN-SUFFIX,tiktokcdn.com,TIKTOK
+  - DOMAIN-SUFFIX,tiktokv.com,TIKTOK
+  - DOMAIN-SUFFIX,tiktok.com,TIKTOK
+  - DOMAIN-SUFFIX,bytedance.com,TIKTOK
+  - DOMAIN-SUFFIX,byteoversea.com,TIKTOK
+  - DOMAIN-SUFFIX,ibytedtos.com,TIKT
