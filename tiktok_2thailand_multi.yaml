@@ -1,0 +1,60 @@
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+external-controller: :9090
+
+proxies:
+  - name: "Thailand-IPRoyal-1"
+    type: socks5
+    server: 95.170.21.232
+    port: 12324
+    username: 14a6853ff7b65
+    password: 59a856a5c4
+    udp: true
+
+  - name: "Thailand-IPRoyal-2"
+    type: socks5
+    server: 95.170.21.232
+    port: 10324
+    username: 14a6853ff7b65
+    password: 59a856a5c4
+    udp: true
+
+proxy-groups:
+  - name: "🌏 代理选择"
+    type: select
+    proxies:
+      - "Thailand-IPRoyal-1"
+      - "Thailand-IPRoyal-2"
+      - DIRECT
+
+  - name: "🎬 TikTok"
+    type: select
+    proxies:
+      - "Thailand-IPRoyal-1"
+      - "Thailand-IPRoyal-2"
+      - DIRECT
+
+rules:
+  # TikTok 专属加速
+  - DOMAIN-SUFFIX,tiktokcdn.com,🎬 TikTok
+  - DOMAIN-SUFFIX,tiktokv.com,🎬 TikTok
+  - DOMAIN-SUFFIX,byteoversea.com,🎬 TikTok
+  - DOMAIN-SUFFIX,ibytedtos.com,🎬 TikTok
+  - DOMAIN-SUFFIX,ibyteimg.com,🎬 TikTok
+  - DOMAIN-SUFFIX,ttwstatic.com,🎬 TikTok
+  - DOMAIN-SUFFIX,bytedance.com,🎬 TikTok
+  - DOMAIN-SUFFIX,tiktok.com,🎬 TikTok
+
+  # YouTube / Shopee 可选代理
+  - DOMAIN-SUFFIX,youtube.com,🌏 代理选择
+  - DOMAIN-SUFFIX,googlevideo.com,🌏 代理选择
+  - DOMAIN-SUFFIX,shopee.co.th,🌏 代理选择
+  - DOMAIN-SUFFIX,lazada.co.th,🌏 代理选择
+
+  # 系统服务直连
+  - DOMAIN-SUFFIX,apple.com,DIRECT
+  - DOMAIN-SUFFIX,windowsupdate.com,DIRECT
+  - GEOIP,TH,DIRECT
+  - MATCH,🌏 代理选择
